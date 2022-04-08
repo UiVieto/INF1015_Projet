@@ -1,6 +1,9 @@
 #pragma once
 #include <QMainWindow>
 #include <QpushButton>
+#include <QVBoxLayout>
+
+#include "echiquier.h"
 
 class InterfaceGraphique : public QMainWindow
 {
@@ -8,9 +11,12 @@ class InterfaceGraphique : public QMainWindow
 
 public:
 	InterfaceGraphique(QWidget* parent = nullptr);
+	~InterfaceGraphique();
 
-	~InterfaceGraphique() noexcept;
+private slots:
+	void direBonjour();
 
 private:
-	QPushButton* boutonDebut = nullptr;
+	QGraphicsView* vue;
+	InterfaceEchiquier* echiquier;
 };
