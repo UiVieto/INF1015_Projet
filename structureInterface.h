@@ -9,8 +9,8 @@ class InterfaceGraphique : public QMainWindow
 public:
 	InterfaceGraphique(QWidget* parent = nullptr);
 
-	~InterfaceGraphique() noexcept = default;
+	~InterfaceGraphique() noexcept;
 
 private:
-	QPushButton boutonDebut;
+	QPushButton* boutonDebut = nullptr;
 };
