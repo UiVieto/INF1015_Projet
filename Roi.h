@@ -1,7 +1,6 @@
-#include Piece.h
+#include "Piece.h"
 
+class Roi : public Piece
+{
 
-class Roi : public Piece {
-private:
-	bool estUnRoi = true; 
 };

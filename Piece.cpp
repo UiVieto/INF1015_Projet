@@ -1,17 +1,10 @@
 #include "Piece.h"
 
-Piece::Piece() {
+Piece::getCouleurPiece() { return couleur;}
 
+Piece::getTypePiece() { return type; }
+
+Piece::setPremierCoup() 
+{
+	(*this).estUnPremierCoup = true;
 }
-
-Piece::~Piece() {
-
-}
-
-Piece::mouvementPossible() {
-	return true
-}
-
-Piece::bougerPiece() {
-
-} 

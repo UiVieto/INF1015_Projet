@@ -1,18 +1,37 @@
-#pragma once
-#include "Piece.h"
+#include "InterfacePieces.h"
+#include "Position.h"
+#include "echiquier.h"
 
-Piece::Piece() {
+enum class TypePiece
+{
+	Roi,
+	Reine,
+	Pion,
+	Tour,
+	Cavalier
+};
 
-}
+enum class CouleurPiece
+{
+	noir,
+	blanc
+};
 
-Piece::~Piece() {
+class Piece : public interfacesPiece
+{
+public:
+	Piece(TypePiece type, CouleurPiece couleur, Poition pos, Echiquier echiquier);
 
-}
+	~Piece();
 
-Piece::mouvementPossible() {
-	return true
-}
+	CouleurPiece getCouleurPiece();
+	TypePiece getTypePiece();
+	bool estUnMouvementValide(Position pos);
+	void setPremierCoup();
 
-Piece::bougerPiece() {
+	Position pos;
+	TypePiece type;
+	CouleurPiece couleur;
+	bool estUnPremierCoup = false;
 
-}
+};

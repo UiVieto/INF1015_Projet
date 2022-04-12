@@ -1,5 +1,7 @@
 #include "Pion.h"
 
-Pion::mouvementPossible() {
 
+Pion::estUnMouvementValide(Position nouvellePos)
+{
+	if (estUnPremierCoup)
 }
