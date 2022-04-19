@@ -36,9 +36,9 @@ int main(int argc, char* argv[])
 	Echiquier echiquier;
 
 	cout << "Ajout d'un roi blanc a la position (1, 1) : a1" << endl;
-	echiquier.ajouterPiece(make_unique<Roi>(Roi(Couleur::Blanc)), pair<int, int> {1, 1});
+	echiquier.ajouterPiece(make_shared<Roi>(Roi(Couleur::Blanc)), pair<int, int> {1, 1});
 	cout << "Ajout d'un fou blanc a la position (1, 2) : a2" << endl;
-	echiquier.ajouterPiece(make_unique<Fou>(Fou(Couleur::Blanc)), pair<int, int> {1, 2});
+	echiquier.ajouterPiece(make_shared<Fou>(Fou(Couleur::Blanc)), pair<int, int> {1, 2});
 
 	cout << "Deplacement du fou de a2 (1, 2) à d5 (4, 5)" << endl;
 	pair<int, int> positionInitiale(1, 2);
@@ -53,6 +53,8 @@ int main(int argc, char* argv[])
 	cout << (dynamic_cast<Fou*>(echiquier.prendrePiece(pair<int, int>{4, 5}).get()) ? "Fou" : "Autre") << endl;
 	cout << "Il y a" << ((echiquier.prendrePiece(nouvellePosition).get() == nullptr) ? " aucune piece " : " une piece ");
 	cout << "en f6 (6, 6)" << endl;
+
+	echiquier.ajouterPiece(make_shared<Tour>(Tour(Couleur::Blanc)), pair<int, int> {3, 6});
 
 	QApplication jeu(argc, argv);
 	InterfaceGraphique interface(&echiquier);

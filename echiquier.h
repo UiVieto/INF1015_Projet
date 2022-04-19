@@ -43,7 +43,7 @@ public:
 
 private:
 	bool estMouvementPossible(pair<int, int>& positionInitiale,
-		pair<int, int>& nouvellePosition) const override;
+		                      pair<int, int>& nouvellePosition) const override;
 };
 
 class Tour : public Piece

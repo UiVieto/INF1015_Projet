@@ -43,7 +43,7 @@ Fou::Fou(Couleur couleur) {
 }
 
 bool Fou::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
-	return ((positionInitiale.first - nouvellePosition.first) == (positionInitiale.second - nouvellePosition.second));
+	return (abs(positionInitiale.first - nouvellePosition.first) == abs(positionInitiale.second - nouvellePosition.second));
 }
 
 /*--------------------------------Echiquier---------------------------------*/
