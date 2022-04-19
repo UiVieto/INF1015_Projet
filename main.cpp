@@ -56,6 +56,8 @@ int main(int argc, char* argv[])
 
 	echiquier.ajouterPiece(make_shared<Tour>(Tour(Couleur::Blanc)), pair<int, int> {3, 6});
 
+	echiquier.ajouterPiece(make_shared<Reine>(Reine(Couleur::Blanc)), pair<int, int> {2, 1});
+
 	QApplication jeu(argc, argv);
 	InterfaceGraphique interface(&echiquier);
 

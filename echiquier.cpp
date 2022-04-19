@@ -20,10 +20,10 @@ bool Reine::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int
 	const int deplacementHorizontal = nouvellePosition.first - positionInitiale.first;
 	const int deplacementVertical = nouvellePosition.second - positionInitiale.second;
 
-	if (((positionInitiale.first - nouvellePosition.first) == (positionInitiale.second - nouvellePosition.second)))
+	if ((abs(positionInitiale.first - nouvellePosition.first) != abs(positionInitiale.second - nouvellePosition.second)))
 		return (deplacementHorizontal * deplacementVertical == 0 && deplacementHorizontal - deplacementVertical != 0);
 
-	return false;
+	return true;
 }
 
 Tour::Tour(Couleur couleur) {
