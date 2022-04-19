@@ -1,8 +1,9 @@
-
-#include "structureInterface.h"
-#include "structurePieces.h"
+#include "vue.h"
+#include "echiquier.h"
+#include <iostream>
 #include <QApplication>
 #include <QPushButton>
+using namespace std;
 
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"
@@ -31,8 +32,30 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 
 int main(int argc, char* argv[])
 {
+	cout << "Creation d'un echiquier" << endl;
+	Echiquier echiquier;
+
+	cout << "Ajout d'un roi blanc a la position (1, 1) : a1" << endl;
+	echiquier.ajouterPiece(make_unique<Roi>(Roi(Couleur::Blanc)), pair<int, int> {1, 1});
+	cout << "Ajout d'un fou blanc a la position (1, 2) : a2" << endl;
+	echiquier.ajouterPiece(make_unique<Fou>(Fou(Couleur::Blanc)), pair<int, int> {1, 2});
+
+	cout << "Deplacement du fou de a2 (1, 2) à d5 (4, 5)" << endl;
+	pair<int, int> positionInitiale(1, 2);
+	pair<int, int> nouvellePosition(4, 5);
+	echiquier.deplacerPiece(positionInitiale, nouvellePosition);
+	positionInitiale = { 4, 5 };
+	nouvellePosition = { 6, 6 };
+	cout << "Tentative de deplacement du fou de d5 à f6" << endl;
+	echiquier.deplacerPiece(positionInitiale, nouvellePosition);
+
+	cout << "La piece en (4, 5) est un ";
+	cout << (dynamic_cast<Fou*>(echiquier.prendrePiece(pair<int, int>{4, 5}).get()) ? "Fou" : "Autre") << endl;
+	cout << "Il y a" << ((echiquier.prendrePiece(nouvellePosition).get() == nullptr) ? " aucune piece " : " une piece ");
+	cout << "en f6 (6, 6)" << endl;
+
 	QApplication jeu(argc, argv);
-	InterfaceGraphique interface;
+	InterfaceGraphique interface(&echiquier);
 
 	interface.show();
 
