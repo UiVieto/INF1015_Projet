@@ -1,22 +1,10 @@
-ï»¿#pragma region "BibliothÃ¨ques"//{
-
+#include "vue.h"
+#include "echiquier.h"
 #include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <cctype>
-#include <cmath>
-#include <cstdint>
-#include <cstdlib>
-#include <ctime>
-#include <gsl/span>
-#include <cppitertools/range.hpp>
-#include <cppitertools/enumerate.hpp>
-
-//#if __has_include("gtest/gtest.h")
-//#include "gtest/gtest.h"
-//#endif
+#include <QApplication>
+#include <QPushButton>
+using namespace std;
+#include <stdexcept>
 
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"
@@ -28,36 +16,47 @@ auto& cdbg = clog;
 
 #if __has_include("verification_allocation.hpp")
 #include "verification_allocation.hpp"
-#include "debogage_memoire.hpp"  //NOTE: Incompatible avec le "placement new", ne pas utiliser cette entÃªte si vous utilisez ce type de "new" dans les lignes qui suivent cette inclusion.
+#include "debogage_memoire.hpp"  //NOTE: Incompatible avec le "placement new", ne pas utiliser cette entête si vous utilisez ce type de "new" dans les lignes qui suivent cette inclusion.
 #endif
 
 void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
 	#ifdef BIBLIOTHEQUE_COURS_INCLUS
-	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par dÃ©faut.
+	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
 
-	// cdbg.setTee(&clog);  // DÃ©commenter cette ligne pour que cdbg affiche sur la console en plus de la "Sortie" du dÃ©bogueur.
+	// cdbg.setTee(&clog);  // Décommenter cette ligne pour que cdbg affiche sur la console en plus de la "Sortie" du débogueur.
 	
-	// bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un rÃ©sultat de test.
+	bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un résultat de test.
 	#endif
+	//NOTE: C'est normal que la couverture de code dans l'Explorateur de tests de Visual Studio ne couvre pas la fin de cette fonction ni la fin du main après l'appel à cette fonction puisqu'il exécute uniquement les tests Google Test dans l'appel ci-dessus.
 }
-
-using namespace std;
-using namespace std::literals;
-using namespace iter;
-using namespace gsl;
-
-#pragma endregion//}
-
-
 
 int main(int argc, char* argv[])
 {
-	initialiserBibliothequeCours(argc, argv);
+	cout << "Creation d'un echiquier" << endl;
 
-	// Exemple d'affichage: (si la bibliothÃ¨que est bien chargÃ©e, l'accent devrait sortir correctement et la couleur aussi)
-	cout << "Bonjour Ã  tous!\n"
-		<< "\033[35mEn couleur!\033[0m\n";
-	// Exemple d'affichage de dÃ©bogage, devrait Ãªtre dans la fenÃªtre "Sortie" de Visual Studio:
-	cdbg << "Bonjour dÃ©bogueur!\n";
+	cout << "Ajout d'un roi blanc a la position (1, 1) : a1" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(make_unique<Roi>(Roi(Couleur::Blanc)), pair<int, int> {1, 1});
+
+	cout << "Ajout d'une reine en b1" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(make_unique<Reine>(Reine(Couleur::Noir)), pair<int, int> {2, 1});
+
+	QApplication jeu(argc, argv);
+	Affichage::InterfaceGraphique interface(nullptr);
+
+	interface.show();
+
+	return jeu.exec();
+
+	//Test Exception
+	try {
+		unique_ptr<Roi> Roi = make_unique<Roi>(Roi(Couleur::Blanc));
+		unique_ptr<Roi> Roi = make_unique<Roi>(Roi(Couleur::Noir));
+		unique_ptr<Roi> Roi = make_unique<Roi>(Roi(Couleur::Blanc));
+	}
+	catch (logic_error& e)
+	{
+		cout << "Erreur " << e.what() << endl;
+	}
+
 }
