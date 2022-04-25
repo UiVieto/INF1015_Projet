@@ -8,30 +8,39 @@
 #include <QGraphicsScene>
 
 #include "echiquier.h"
+#include "pieces.h"
 
-class InterfacePiece : public QGraphicsRectItem
+class InterfacePiece : public QObject, public QGraphicsRectItem
 {
+	Q_OBJECT
+
 public:
-	InterfacePiece(const shared_ptr<Piece>& piece, Echiquier*& echiquier, pair<int, int> position);
+	InterfacePiece(pair<int, int> position);
 
 protected:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent* evenement) override;
 
+signals:
+	void changementPosition(pair<int, int>& position);
+
 private:
-	Echiquier* pointeurEchiquier_;
 	pair<int, int> positionActuelle_;
+	friend class InterfaceEchiquier;
 };
 
 class InterfaceEchiquier : public QGraphicsScene
 {
+	Q_OBJECT
+
 public:
-	InterfaceEchiquier(Echiquier*& echiquier, QObject* parent = nullptr);
+	InterfaceEchiquier(QObject* parent = nullptr);
 	~InterfaceEchiquier() = default;
 
-	QList<InterfacePiece*> listePieces;
+public slots:
+	void actualiserPosition(pair<int, int>& position);
 
 private:
-	const Echiquier* pointeurEchiquier_;
+	QList<InterfacePiece*> listePieces;
 };
 
 class InterfaceGraphique : public QMainWindow
@@ -39,7 +48,7 @@ class InterfaceGraphique : public QMainWindow
 	Q_OBJECT
 
 public:
-	InterfaceGraphique(Echiquier* echiquier, QWidget* parent = nullptr);
+	InterfaceGraphique(QWidget* parent = nullptr);
 	~InterfaceGraphique();
 
 private:

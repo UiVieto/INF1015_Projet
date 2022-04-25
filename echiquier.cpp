@@ -1,75 +1,65 @@
 #include "echiquier.h"
-#include <cmath>
 
-/*--------------------------------Pieces---------------------------------*/
-
-Roi::Roi(Couleur couleur) {
-	couleur_ = couleur;
+Echiquier& Echiquier::echiquier() {
+	static Echiquier echiquier;
+	return echiquier;
 }
 
-bool Roi::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
-	return (abs(nouvellePosition.first - positionInitiale.first) <= 1 && 
-		    abs(nouvellePosition.second - positionInitiale.second) <= 1);
-}
-
-Reine::Reine(Couleur couleur) {
-	couleur_ = couleur;
-}
-
-bool Reine::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
-	const int deplacementHorizontal = nouvellePosition.first - positionInitiale.first;
-	const int deplacementVertical = nouvellePosition.second - positionInitiale.second;
-
-	if ((abs(positionInitiale.first - nouvellePosition.first) != abs(positionInitiale.second - nouvellePosition.second)))
-		return (deplacementHorizontal * deplacementVertical == 0 && deplacementHorizontal - deplacementVertical != 0);
-
-	return true;
-}
-
-Tour::Tour(Couleur couleur) {
-	couleur_ = couleur;
-}
-
-bool Tour::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
-	const int deplacementHorizontal = nouvellePosition.first - positionInitiale.first;
-	const int deplacementVertical = nouvellePosition.second - positionInitiale.second;
-
-	return (deplacementHorizontal * deplacementVertical == 0 && 
-		    deplacementHorizontal - deplacementVertical != 0);
-}
-
-Fou::Fou(Couleur couleur) {
-	couleur_ = couleur;
-}
-
-bool Fou::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
-	return (abs(positionInitiale.first - nouvellePosition.first) == abs(positionInitiale.second - nouvellePosition.second));
-}
-
-/*--------------------------------Echiquier---------------------------------*/
-
-void Echiquier::ajouterPiece(shared_ptr<Piece> piece, pair<int, int> position) {
-	//TODO: Vérifier que la pièce ajoutée soit dans l'échiquier.
-		grille_[position] = move(piece);
+void Echiquier::ajouterPiece(unique_ptr<Piece> piece, pair<int, int> position) {
+	grille_[position] = move(piece);
 }
 
 void Echiquier::deplacerPiece(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) {
-	shared_ptr<Piece>& piece = prendrePiece(positionInitiale);
-
+	unique_ptr<Piece>& piece = prendrePiece(positionInitiale);
+	
 	if (piece->estMouvementPossible(positionInitiale, nouvellePosition)) 
 	{
-		if (!verifierObstacle(positionInitiale, nouvellePosition)) {
-			grille_[nouvellePosition] = move(piece);
+		if (!verifierObstacle(positionInitiale, nouvellePosition))
+		{
+			unique_ptr<Piece>& autrePiece = prendrePiece(nouvellePosition);
+			if (autrePiece != nullptr)
+			{
+				if (autrePiece->couleur_ != piece->couleur_) {
+					grille_[nouvellePosition] = move(piece);
+				}
+			}
+
+			else {
+				grille_[nouvellePosition] = move(piece);
+			}
 		}
 	}
 }
 
-shared_ptr<Piece>& Echiquier::prendrePiece(pair<int, int> position) {
+unique_ptr<Piece>& Echiquier::prendrePiece(pair<int, int> position) {
 	return grille_[position];
 }
 
-bool Echiquier::verifierObstacle(pair<int, int>& positionInitiale, pair<int, int>& nouvelleInitiale)
+int calculerDirection(int valeurInitiale, int nouvelleValeur) {
+	const int variation = nouvelleValeur - valeurInitiale;
+	
+	return (variation == 0) ? 0 : variation / abs(variation);
+}
+
+bool Echiquier::verifierObstacle(const pair<int, int>& positionInitiale, const pair<int, int>& nouvellePosition)
 {
-	//TODO: Vérifier s'il y aucune pièce qui bloque le chemin.
-	return false;  
+	//TODO: Si c'est un cheval, passer la vérification.
+
+	const int directionHorizontale = calculerDirection(positionInitiale.first, nouvellePosition.first);
+	const int directionVerticale = calculerDirection(positionInitiale.second, nouvellePosition.second);
+	int x = positionInitiale.first;
+	int y = positionInitiale.second;
+
+	while (true) {
+		x += directionHorizontale;
+		y += directionVerticale;
+
+		if (nouvellePosition == pair<int, int>{x, y})
+			break;
+
+		else if (grille_[{ x, y }] != nullptr)
+			return true;
+	}
+
+	return false;
 }

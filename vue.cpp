@@ -4,30 +4,35 @@
 #include <QGraphicsView>
 #include <QDebug>
 
-InterfaceEchiquier::InterfaceEchiquier(Echiquier*& echiquier, QObject* parent) : QGraphicsScene(parent) {
-	pointeurEchiquier_ = echiquier;
+constexpr int LONGUEUR_CASE = 60;
+constexpr int NOMBRE_CASES = 8;
 
-	for (int i = 0; i <= 8; i++) {
-		addLine(0, i * 50, 400, i * 50, QPen(Qt::gray));
-		addLine(i * 50, 0, i * 50, 400), QPen(Qt::gray);
+InterfaceEchiquier::InterfaceEchiquier(QObject* parent) : QGraphicsScene(parent) {
+	for (int i = 0; i <= NOMBRE_CASES; i++) {
+		addLine(0, i * LONGUEUR_CASE, NOMBRE_CASES * LONGUEUR_CASE, i * LONGUEUR_CASE, QPen(Qt::gray));
+		addLine(i * LONGUEUR_CASE, 0, i * LONGUEUR_CASE, NOMBRE_CASES * LONGUEUR_CASE), QPen(Qt::gray);
 	}
 
-	for (auto& element : pointeurEchiquier_->grille_) {
-		if (element.second.get() != nullptr) {
-			InterfacePiece* interfacePiece = new InterfacePiece(element.second, echiquier, element.first);
-			interfacePiece->setPos((element.first.first - 1) * 50, (8 - element.first.second) * 50);
+	for (auto& element : Echiquier::echiquier().grille_) 
+	{
+		if (element.second.get() != nullptr) 
+		{
+			InterfacePiece* interfacePiece = new InterfacePiece(element.first);
+			interfacePiece->setPos((element.first.first - 1) * LONGUEUR_CASE, (NOMBRE_CASES - element.first.second) * LONGUEUR_CASE);
 			listePieces.append(interfacePiece);
 			addItem(interfacePiece);
+
+			QObject::connect(interfacePiece, SIGNAL(changementPosition(pair<int, int>&)), this, SLOT(actualiserPosition(pair<int, int>&)));
 		}
 	}
 }
 
-InterfaceGraphique::InterfaceGraphique(Echiquier* pointeurEchiquier, QWidget* parent) : QMainWindow(parent)
+InterfaceGraphique::InterfaceGraphique(QWidget* parent) : QMainWindow(parent)
 {
 	setWindowTitle("Jeu d'echec (prototype)");
 
 	vue = new QGraphicsView(this);
-	echiquier = new InterfaceEchiquier(pointeurEchiquier, vue);
+	echiquier = new InterfaceEchiquier(vue);
 
 	vue->setScene(echiquier);
 
@@ -46,33 +51,43 @@ InterfaceGraphique::~InterfaceGraphique() {
 }
 
 //TODO ajouter des images différents pour les pieces
-InterfacePiece::InterfacePiece(const shared_ptr<Piece>& piece, Echiquier*& echiquier, pair<int, int> position) {
-	setRect(0, 0, 50, 50);
+InterfacePiece::InterfacePiece(pair<int, int> position) {
+	setRect(0, 0, LONGUEUR_CASE, LONGUEUR_CASE);
 	setPen(QPen(Qt::black));
 	setBrush(QBrush(Qt::red));
 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 
-	pointeurEchiquier_ = echiquier;
 	positionActuelle_ = position;
 }
 
 void InterfacePiece::mouseReleaseEvent(QGraphicsSceneMouseEvent* evenement) {
-	int x = (pos().x() + 25) - ((int(pos().x()) + 25) % 50);
-	int y = (pos().y() + 25) - ((int(pos().y()) + 25) % 50);
-	pair<int, int> nouvellePosition = { x / 50 + 1, 8 - y / 50 };
+	int x = (pos().x() + LONGUEUR_CASE / 2) - ((int(pos().x()) + LONGUEUR_CASE / 2) % LONGUEUR_CASE);
+	int y = (pos().y() + LONGUEUR_CASE / 2) - ((int(pos().y()) + LONGUEUR_CASE / 2) % LONGUEUR_CASE);
+	pair<int, int> nouvellePosition = { x / LONGUEUR_CASE + 1, 8 - y / LONGUEUR_CASE };
 
-	pointeurEchiquier_->deplacerPiece(positionActuelle_, nouvellePosition);
+	Echiquier::echiquier().deplacerPiece(positionActuelle_, nouvellePosition);
 
-	if (pointeurEchiquier_->prendrePiece(positionActuelle_).get() == nullptr) {
+	if (Echiquier::echiquier().prendrePiece(positionActuelle_).get() == nullptr) {
+		emit changementPosition(nouvellePosition);
 		setPos(x, y);
 		positionActuelle_ = nouvellePosition;
 	}
 		
 	else {
-		setPos((positionActuelle_.first - 1) * 50, (8 - positionActuelle_.second) * 50);
+		setPos((positionActuelle_.first - 1) * LONGUEUR_CASE, (NOMBRE_CASES - positionActuelle_.second) * LONGUEUR_CASE);
 	}
 
 	QGraphicsRectItem::mouseReleaseEvent(evenement);
 }
+
+void InterfaceEchiquier::actualiserPosition(pair<int, int>& nouvellePosition) {
+	for (InterfacePiece* piece : listePieces) {
+		if (piece->positionActuelle_ == nouvellePosition) {
+			delete piece;
+			break;
+		}
+	}
+}
+
