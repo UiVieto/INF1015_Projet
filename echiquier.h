@@ -2,26 +2,31 @@
 #include <utility>
 #include <map>
 #include <memory>
-using namespace std;
+#include "piece.h"
 
-#include "pieces.h"
-
-class Echiquier
+namespace LogiqueJeu 
 {
-public:
-	static Echiquier& echiquier();
+	using PointeurPiece = std::unique_ptr<LogiqueJeu::Piece>;
+	using GrilleEchiquier = std::map<std::pair<int, int>, PointeurPiece>;
+	using IterateurGrilleEchiquier = GrilleEchiquier::iterator;
 
-	unique_ptr<Piece>& prendrePiece(pair<int, int> position);
-	void ajouterPiece(unique_ptr<Piece> piece, pair<int, int> position);
-	void deplacerPiece(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition);
+	class Echiquier
+	{
+	public:
+		static Echiquier& echiquier();
+
+		PointeurPiece& prendrePiece(pair<int, int> position);
+		void ajouterPiece(PointeurPiece piece, pair<int, int> position);
+		void deplacerPiece(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition);
 	
-private:
-	Echiquier() = default;
+		IterateurGrilleEchiquier begin();
+		IterateurGrilleEchiquier end();
 
-	bool verifierObstacle(const pair<int, int>& positionInitiale, const pair<int, int>& nouvellePosition);
-	
-	map<pair<int, int>, unique_ptr<Piece>> grille_;
-	const static int taille_ = 8;
+	private:
+		Echiquier() = default;
 
-	friend InterfaceEchiquier;
-};
+		bool verifierObstacle(const pair<int, int>& positionInitiale, const pair<int, int>& nouvellePosition);
+		GrilleEchiquier grille_;
+		const static int taille_ = 8;
+	};
+}
