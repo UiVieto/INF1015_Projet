@@ -2,6 +2,9 @@
 #include "piece.h"
 #include <iostream>
 
-LogiqueJeu::Piece::~Piece() {
+Piece::~Piece() {
 	cout << "Destruction de piece" << endl;
+}
+Couleur Piece::getColor() {
+	return couleur_;
 }

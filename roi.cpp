@@ -14,7 +14,7 @@ namespace LogiqueJeu
 	couleur_ = couleur;
 	}
 
-	bool LogiqueJeu::Roi::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
+	bool Roi::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition, std::map<std::pair<int, int>, std::unique_ptr<LogiqueJeu::Piece>> grille) const {
 		return (abs(nouvellePosition.first - positionInitiale.first) <= 1 &&
 			abs(nouvellePosition.second - positionInitiale.second) <= 1);
 	}

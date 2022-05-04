@@ -14,7 +14,7 @@ namespace LogiqueJeu
 	{
 	public:
 		static Echiquier& echiquier();
-
+		//gérer la promotion du pion 
 		PointeurPiece& prendrePiece(pair<int, int> position);
 		void ajouterPiece(PointeurPiece piece, pair<int, int> position);
 		void deplacerPiece(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition);
