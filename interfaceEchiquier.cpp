@@ -2,21 +2,10 @@
 #include "interfaceEchiquier.h"
 #include "echiquier.h"
 
-
-	void Affichage::InterfaceEchiquier::actualiserPosition(pair<int, int>& position) {
-		for (InterfacePiece* piece : listePieces) {
-			if (piece->positionActuelle_ == position) {
-				delete piece;
-				break;
-			}
-		}
-	}
-
-	Affichage::InterfaceEchiquier::InterfaceEchiquier(QObject* parent) : QGraphicsScene(parent) {
-		for (int i = 0; i <= NOMBRE_CASES; i++) {
-			addLine(0, i * LONGUEUR_CASE, NOMBRE_CASES * LONGUEUR_CASE, i * LONGUEUR_CASE, QPen(Qt::gray));
-			addLine(i * LONGUEUR_CASE, 0, i * LONGUEUR_CASE, NOMBRE_CASES * LONGUEUR_CASE), QPen(Qt::gray);
-		}
+namespace Affichage 
+{
+	InterfaceEchiquier::InterfaceEchiquier(QObject* parent) : QGraphicsScene(parent) {
+		creerGrille();
 
 		for (auto& element : LogiqueJeu::Echiquier::echiquier()) {
 			if (element.second.get() != nullptr)
@@ -30,3 +19,44 @@
 			}
 		}
 	}
+	
+	void InterfaceEchiquier::actualiserPosition(pair<int, int>& position) {
+		for (InterfacePiece* piece : listePieces) {
+			if (piece->positionActuelle_ == position) {
+				delete piece;
+				break;
+			}
+		}
+	}
+
+	void InterfaceEchiquier::creerGrille() 
+	{
+		Couleur couleurCase = Couleur::Blanc;
+
+		for (int x = 1; x <= NOMBRE_CASES; x++) 
+		{
+			(couleurCase == Couleur::Blanc) ? couleurCase = Couleur::Noir : couleurCase = Couleur::Blanc;
+			for (int y = 1; y <= NOMBRE_CASES; y++) 
+			{
+				QGraphicsRectItem* caseEchiquier = new QGraphicsRectItem;
+				caseEchiquier->setRect(0, 0, LONGUEUR_CASE, LONGUEUR_CASE);
+				caseEchiquier->setPen(QPen(Qt::black));
+
+				if (couleurCase == Couleur::Blanc) {
+					caseEchiquier->setBrush(QBrush(Qt::gray));
+					couleurCase = Couleur::Noir;
+				}
+
+				else {
+					caseEchiquier->setBrush(QBrush(Qt::darkGreen)); 
+					couleurCase = Couleur::Blanc;
+				}
+					
+				caseEchiquier->setPos((x - 1) * LONGUEUR_CASE, (NOMBRE_CASES - y) * LONGUEUR_CASE);
+				listeCases.append(caseEchiquier);
+				addItem(caseEchiquier);
+			}
+		}
+	}
+
+}

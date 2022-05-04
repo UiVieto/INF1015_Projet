@@ -48,36 +48,22 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 
 int main(int argc, char* argv[])
 {
-	//Attention, l'implémentation du move et du make_unique fait appel au destructeur lors de l'ajout de piece. 
-	//N. B. L'échiquier est un singleton.
-	cout << "Ajout d'un roi blanc a la position a1" << endl;
-	LogiqueJeu::Echiquier::echiquier().ajouterPiece(make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Blanc)), pair<int, int> {1, 1});
-
-	cout << "Ajout d'une reine en b1" << endl;
-	LogiqueJeu::Echiquier::echiquier().ajouterPiece(make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Noir)), pair<int, int> {2, 1});
-
-	cout << "Ajout d'une tour en g1" << endl;
-	LogiqueJeu::Echiquier::echiquier().ajouterPiece(make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Blanc)), pair<int, int> {7, 1});
-
 	QApplication jeu(argc, argv);
 	Affichage::InterfaceGraphique interface(nullptr);
 
-	//Il devrait y avoir trois pièces (carrés rouges) : un roi blanc en a1 et une reine noire en b1 et une tour blanche en g1 
-	//qui peuvent être déplacés. Les captures sont implémentées, mais pas les échecs ou les tours de jeu. La capture
-	//détruit l'objet en question à la fois dans la vue et le modèle (l'échiquier), et désalloue la mémoire.
 	interface.show();
 
 	//Test Exception
-	try {
-		cout << "Creation d'un deuxieme roi" << endl;
-		unique_ptr<LogiqueJeu::Roi> roi2 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Blanc));
-		cout << "Tentative de creation d'un troisieme roi" << endl;
-		unique_ptr<LogiqueJeu::Roi> roi3 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Noir));
-	}
+	//try {
+		//cout << "Creation d'un deuxieme roi" << endl;
+		//unique_ptr<LogiqueJeu::Roi> roi2 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Blanc));
+		//cout << "Tentative de creation d'un troisieme roi" << endl;
+		//unique_ptr<LogiqueJeu::Roi> roi3 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Noir));
+	//}
 
-	catch (logic_error& e) {
-		cout << "Erreur " << e.what() << endl;
-	}
+	//catch (logic_error& e) {
+		//cout << "Erreur " << e.what() << endl;
+	//}
 	
 	return jeu.exec();
 }

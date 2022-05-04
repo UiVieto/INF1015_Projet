@@ -1,13 +1,13 @@
 #pragma once
 #include <QObject>
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 
 namespace Affichage 
 {
-	constexpr int LONGUEUR_CASE = 60;
+	constexpr int LONGUEUR_CASE = 106;
 	constexpr int NOMBRE_CASES = 8;
 	
-	class InterfacePiece : public QObject, public QGraphicsRectItem
+	class InterfacePiece : public QObject, public QGraphicsPixmapItem
 	{
 		Q_OBJECT
 
@@ -21,6 +21,8 @@ namespace Affichage
 		void changementPosition(std::pair<int, int>& position);
 
 	private:
+		void ajouterIcone(std::pair<int, int>& position);
+
 		std::pair<int, int> positionActuelle_;
 		friend class InterfaceEchiquier;
 	};

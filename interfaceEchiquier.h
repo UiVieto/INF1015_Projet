@@ -1,5 +1,6 @@
 #pragma once
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
 #include "interfacePiece.h"
 
 namespace Affichage
@@ -10,12 +11,14 @@ namespace Affichage
 
 	public:
 		InterfaceEchiquier(QObject* parent = nullptr);
-		~InterfaceEchiquier() = default;
 
 	public slots:
 		void actualiserPosition(std::pair<int, int>& position);
 
 	private:
+		void creerGrille();
+
 		QList<InterfacePiece*> listePieces;
+		QList<QGraphicsRectItem*> listeCases;
 	};
 }

@@ -1,4 +1,5 @@
 #include "echiquier.h"
+#include "cavalier.h"
 
 int calculerDirection(int valeurInitiale, int nouvelleValeur);
 
@@ -39,6 +40,10 @@ namespace LogiqueJeu
 		}
 	}
 
+	void Echiquier::selectionnerPlacementPieces(const string nomPlacement) {
+		registrePlacementsDePieces_[nomPlacement]->placerPieces();
+	}
+
 	IterateurGrilleEchiquier Echiquier::begin() {
 		return grille_.begin();
 	}
@@ -49,7 +54,9 @@ namespace LogiqueJeu
 
 	bool Echiquier::verifierObstacle(const pair<int, int>& positionInitiale, const pair<int, int>& nouvellePosition)
 	{
-		//TODO: Si c'est un cheval, passer la vérification.
+		if (dynamic_cast<Cavalier*>(Echiquier::echiquier().prendrePiece(positionInitiale).get()) != nullptr) {
+			return false;
+		}
 
 		const int directionHorizontale = calculerDirection(positionInitiale.first, nouvellePosition.first);
 		const int directionVerticale = calculerDirection(positionInitiale.second, nouvellePosition.second);
@@ -69,9 +76,13 @@ namespace LogiqueJeu
 
 		return false;
 	}
+
+	void Echiquier::enregistrerPlacementDePieces(string nomPlacementDePieces, StrategiePlacementPieces* strategie) {
+		registrePlacementsDePieces_[nomPlacementDePieces] = strategie;
+	}
 }
 
-int calculerDirection(int valeurInitiale, int nouvelleValeur) 
+static int calculerDirection(int valeurInitiale, int nouvelleValeur) 
 {
 	const int variation = nouvelleValeur - valeurInitiale;
 

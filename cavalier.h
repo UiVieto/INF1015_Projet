@@ -6,10 +6,12 @@ namespace LogiqueJeu
 	class Cavalier : public Piece
 	{
 	public:
-		Cavalier(Couleur couleur);
+		Cavalier(Couleur couleur) { couleur_ = couleur; };
 
 	protected:
-		bool estMouvementPossible(pair<int, int>& positionInitile,
-			pair<int, int>& nouvellePosition) const override;
+		bool estMouvementPossible(std::pair<int, int>& positionInitile,
+			std::pair<int, int>& nouvellePosition) const override {
+			return true;
+		}
 	};
 }

@@ -6,7 +6,7 @@ namespace LogiqueJeu
 		couleur_ = couleur;
 	}
 
-	bool LogiqueJeu::Fou::estMouvementPossible(pair<int, int>& positionInitiale, pair<int, int>& nouvellePosition) const {
+	bool LogiqueJeu::Fou::estMouvementPossible(std::pair<int, int>& positionInitiale, std::pair<int, int>& nouvellePosition) const {
 		return (abs(positionInitiale.first - nouvellePosition.first) == abs(positionInitiale.second - nouvellePosition.second));
 	}
 }

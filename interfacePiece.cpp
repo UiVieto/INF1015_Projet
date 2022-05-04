@@ -1,15 +1,18 @@
+#pragma once
 #include <QPen>
 #include "interfacePiece.h"
 #include "echiquier.h"
+#include "roi.h"
+#include "reine.h"
+#include "tour.h"
+#include "fou.h"
+#include "cavalier.h"
+#include "pion.h"
 
 namespace Affichage
 {
-	//TODO ajouter des images différents pour les pieces
 	InterfacePiece::InterfacePiece(std::pair<int, int> position) {
-		setRect(0, 0, LONGUEUR_CASE, LONGUEUR_CASE);
-		setPen(QPen(Qt::black));
-
-		setBrush(QBrush(Qt::red));
+		ajouterIcone(position);
 
 		setFlag(QGraphicsItem::ItemIsMovable);
 		setFlag(QGraphicsItem::ItemIsSelectable);
@@ -34,6 +37,70 @@ namespace Affichage
 			setPos((positionActuelle_.first - 1) * LONGUEUR_CASE, (NOMBRE_CASES - positionActuelle_.second) * LONGUEUR_CASE);
 		}
 
-		QGraphicsRectItem::mouseReleaseEvent(evenement);
+		QGraphicsPixmapItem::mouseReleaseEvent(evenement);
 	}
+
+	void InterfacePiece::ajouterIcone(std::pair<int, int>& position) {
+		LogiqueJeu::Piece* piece = LogiqueJeu::Echiquier::echiquier().prendrePiece(position).get();
+
+		if (piece->obtenirCouleur() == Couleur::Blanc) {
+			if (dynamic_cast<LogiqueJeu::Roi*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/roi_blanc.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Reine*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/reine_blanc.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Tour*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/tour_blanc.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Fou*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/fou_blanc.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Cavalier*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/cavalier_blanc.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Pion*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/pion_blanc.png"));
+			}
+
+			else {
+				setPixmap(QPixmap("icones_pieces/erreur.png"));
+			}
+		}
+
+		else {
+			if (dynamic_cast<LogiqueJeu::Roi*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/roi_noir.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Reine*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/reine_noir.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Tour*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/tour_noir.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Fou*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/fou_noir.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Cavalier*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/cavalier_noir.png"));
+			}
+
+			else if (dynamic_cast<LogiqueJeu::Pion*>(piece) != nullptr) {
+				setPixmap(QPixmap("icones_pieces/pion_noir.png"));
+			}
+
+			else {
+				setPixmap(QPixmap("icones_pieces/erreur.png"));
+			}
+		}
+	}	
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QPushButton>
+#include <QLayout>
 
 #include "interfaceEchiquier.h"
 
@@ -15,7 +17,11 @@ namespace Affichage
 		~InterfaceGraphique();
 
 	private:
+		void afficherEchiquier(QHBoxLayout*& layoutPrincipal);
+
 		QGraphicsView* vue;
 		InterfaceEchiquier* echiquier;
+
+		QList<QPushButton*> boutonsDeSelection_;
 	};
 }

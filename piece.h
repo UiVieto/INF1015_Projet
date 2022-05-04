@@ -13,6 +13,7 @@ namespace LogiqueJeu
 	{
 	public:
 		virtual ~Piece();
+		Couleur obtenirCouleur() { return couleur_; }
 
 	protected:
 		virtual bool estMouvementPossible(pair<int, int>& positionInitiale,

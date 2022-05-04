@@ -9,7 +9,7 @@ namespace LogiqueJeu
 		Fou(Couleur couleur);
 
 	protected:
-		bool estMouvementPossible(pair<int, int>& positionInitiale,
-			pair<int, int>& nouvellePosition) const override;
+		bool estMouvementPossible(std::pair<int, int>& positionInitiale,
+			std::pair<int, int>& nouvellePosition) const override;
 	};
 }
