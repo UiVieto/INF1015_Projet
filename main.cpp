@@ -1,22 +1,25 @@
-﻿#pragma region "Bibliothèques"//{
+﻿/* TD6 : Programme avec l'utilisation de namespaces, d'un compteur d'instances de rois et
+ * de pointeur intelligents pour implémenter le RAII.
+ * Fichier : main.cpp
+ * Auteurs : Reda Rhanmouni,	2087548,
+ *			 Huy Viet Nguyen,	2136378
+ * Date : 25 avril 2022
+ */
+
+#include "roi.h"
+#include "reine.h"
+#include "tour.h"
+#include "fou.h"
+#include "cavalier.h"
+#include "pion.h"
+
+#include "interfaceGraphique.h"
+#include "echiquier.h"
 
 #include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <cctype>
-#include <cmath>
-#include <cstdint>
-#include <cstdlib>
-#include <ctime>
-#include <gsl/span>
-#include <cppitertools/range.hpp>
-#include <cppitertools/enumerate.hpp>
-
-//#if __has_include("gtest/gtest.h")
-//#include "gtest/gtest.h"
-//#endif
+#include <QApplication>
+#include <QPushButton>
+#include <stdexcept>
 
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"
@@ -33,31 +36,48 @@ auto& cdbg = clog;
 
 void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-	#ifdef BIBLIOTHEQUE_COURS_INCLUS
+#ifdef BIBLIOTHEQUE_COURS_INCLUS
 	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
 
 	// cdbg.setTee(&clog);  // Décommenter cette ligne pour que cdbg affiche sur la console en plus de la "Sortie" du débogueur.
-	
-	// bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un résultat de test.
-	#endif
+
+	bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un résultat de test.
+#endif
+//NOTE: C'est normal que la couverture de code dans l'Explorateur de tests de Visual Studio ne couvre pas la fin de cette fonction ni la fin du main après l'appel à cette fonction puisqu'il exécute uniquement les tests Google Test dans l'appel ci-dessus.
 }
-
-using namespace std;
-using namespace std::literals;
-using namespace iter;
-using namespace gsl;
-
-#pragma endregion//}
-
-
 
 int main(int argc, char* argv[])
 {
-	initialiserBibliothequeCours(argc, argv);
+	//QApplication jeu(argc, argv);
+	//Affichage::InterfaceGraphique interface(nullptr);
 
-	// Exemple d'affichage: (si la bibliothèque est bien chargée, l'accent devrait sortir correctement et la couleur aussi)
-	cout << "Bonjour à tous!\n"
-		<< "\033[35mEn couleur!\033[0m\n";
-	// Exemple d'affichage de débogage, devrait être dans la fenêtre "Sortie" de Visual Studio:
-	cdbg << "Bonjour débogueur!\n";
+	//interface.show();
+
+	//Test Exception
+	//try {
+		//cout << "Creation d'un deuxieme roi" << endl;
+		//unique_ptr<LogiqueJeu::Roi> roi2 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Blanc));
+		//cout << "Tentative de creation d'un troisieme roi" << endl;
+		//unique_ptr<LogiqueJeu::Roi> roi3 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Noir));
+	//}
+
+	//catch (logic_error& e) {
+		//cout << "Erreur " << e.what() << endl;
+	//}
+
+	//Test ajout Piece
+	cout << "Creation d'une reine noir" << endl;
+	unique_ptr<LogiqueJeu::Reine> reine1 = make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Noir));
+	cout <<  "Ajout reine noir à l'échiquier"
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {1, 1});
+
+	//test prisePiece
+
+	//test VerificationMouvement
+
+	//test Roi échec
+
+
+
+	return jeu.exec();
 }
