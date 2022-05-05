@@ -65,12 +65,6 @@ int main(int argc, char* argv[])
 		//cout << "Erreur " << e.what() << endl;
 	//}
 
-	//Test ajout Piece
-	cout << "Creation d'une reine noir" << endl;
-	unique_ptr<LogiqueJeu::Reine> reine1 = make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Noir));
-	cout <<  "Ajout reine noir à l'échiquier"
-	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {1, 1});
-
 	//test prisePiece
 
 	//test VerificationMouvement
@@ -80,4 +74,80 @@ int main(int argc, char* argv[])
 
 
 	return jeu.exec();
+}
+
+
+Test()
+{
+	//Test creation et ajout Piece
+	cout << "Creation d'une reine noir" << endl;
+	unique_ptr<LogiqueJeu::Reine> reine1 = make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Noir));
+	
+	cout << "Ajout reine noir à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {4, 4});
+
+	cout << "Creation d'un roi noir" << endl;
+	unique_ptr<LogiqueJeu::Roi> roi1 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Noir));
+	cout << "Ajout roi noir à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(roi1)), pair<int, int> {3, 1});
+
+	cout << "Creation d'une tour noir" << endl;
+	unique_ptr<LogiqueJeu::Tour> tour1 = make_unique<LogiqueJeu::Tour>(LogiqueJeu::Tour(Couleur::Noir));
+	cout << "Ajout tour noir à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {2, 1});
+
+	cout << "Creation d'une tour noir" << endl;
+	unique_ptr<LogiqueJeu::Tour> tour2 = make_unique<LogiqueJeu::Tour>(LogiqueJeu::Tour(Couleur::Noir));
+	cout << "Ajout tour  noir à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {6, 1});
+
+	//Pieces blanches
+	cout << "Creation d'une reine blanche" << endl;
+	unique_ptr<LogiqueJeu::Reine> reine2 = make_unique<LogiqueJeu::Reine>(LogiqueJeu::Reine(Couleur::Blanc));
+	cout << "Ajout reine blanche à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine2)), pair<int, int> {3, 8});
+
+	cout << "Creation d'un roi blanc" << endl;
+	unique_ptr<LogiqueJeu::Roi> roi2 = make_unique<LogiqueJeu::Roi>(LogiqueJeu::Roi(Couleur::Blanc));
+	cout << "Ajout roi blanc à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(roi2)), pair<int, int> {5, 8});
+
+	cout << "Creation d'une tour blanche " << endl;
+	unique_ptr<LogiqueJeu::Tour> tour3 = make_unique<LogiqueJeu::Tour>(LogiqueJeu::Tour(Couleur::Blanc));
+	cout << "Ajout tour blanche à l'échiquier" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {7, 1});
+
+	cout << "Creation d'une tour blanche" << endl;
+	unique_ptr<LogiqueJeu::Tour> tour4 = make_unique<LogiqueJeu::Tour>(LogiqueJeu::Tour(Couleur::Blanc));
+	cout << "Ajout tour blanche à l'échiquier, ne devrait pas être possible car deja une piece présente" << endl;
+	LogiqueJeu::Echiquier::echiquier().ajouterPiece(reine1)), pair<int, int> {7, 1}); 
+	
+	//test déplacement piece sans prise
+
+	cout << "Déplacement Tour blanche en A4, aucune restriction" << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {7, 1}, pair<int, int> {7, 4});
+
+	cout << "Déplacement Roi noir en D1, aucune restriction" << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {3, 1}, pair<int, int> {4, 1});
+
+	cout << "Déplacement reine blanche en B8, aucune restriction" << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {3, 8}, pair<int, int> {4, 8});
+
+	//test deplacement impossible 
+	cout << "Déplacement illicite tour blanche a la case 9,2" << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {7, 4}, pair<int, int> {9, 2});
+
+	cout << "Déplacement illicite Roi noir a la case F8 " << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {4, 1}, pair<int, int> {6,8});
+
+	cout << "Déplacement illicite reine blanche en A1  " << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {4, 8}, pair<int, int> {1, 1});
+
+	// test deplacement illicite du roi à cause de mise en échec
+	cout << "Déplacement illicite roi blanc en D8, mise en échec par la reine noire" << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {5, 8}, pair<int, int> {4, 8});
+
+	// test prise de pièce 
+	cout << "Prise de la reine noir par la tour Blanche " << endl;
+	LogiqueJeu::Echiquier::echiquier().deplacerPiece(pair<int, int> {7, 4}, pair<int, int> {4, 4});
 }

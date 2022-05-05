@@ -1,4 +1,5 @@
 #include "echiquier.h"
+#include "roi.h"
 
 int calculerDirection(int valeurInitiale, int nouvelleValeur);
 
@@ -23,6 +24,7 @@ namespace LogiqueJeu
 
 		if (piece->estMouvementPossible(positionInitiale, nouvellePosition))
 		{
+
 			if (!verifierObstacle(positionInitiale, nouvellePosition))
 			{
 				const PointeurPiece& autrePiece = prendrePiece(nouvellePosition);
@@ -40,6 +42,18 @@ namespace LogiqueJeu
 		}
 	}
 
+	bool Echiquier::verifierEchec()
+	{
+		for (auto const& it : grille)
+		{
+			if (dynamic_cast<Roi*>(it.second) != nullptr)
+			{
+				if (it.second->estEnEchec())
+					return true;
+			}
+		}
+		return false;
+	}
 	IterateurGrilleEchiquier Echiquier::begin() {
 		return grille_.begin();
 	}
